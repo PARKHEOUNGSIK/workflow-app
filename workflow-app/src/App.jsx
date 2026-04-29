@@ -173,7 +173,8 @@ function MainApp({ user, onLogout }) {
   }, [])
 
   const fetchProjects = async () => {
-    const { data } = await supabase.from('projects').select('*').order('created_at', { ascending: true })
+    const { data } = await supabase.from('projects').select('*').or(`is_private.eq.false,created_by.eq.${user.id}`)
+    .order('created_at', { ascending: true })
     if (data) {
       setProjects(data)
       if (data.length > 0 && !activeProjectId) setActiveProjectId(data[0].id)
