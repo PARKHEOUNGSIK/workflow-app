@@ -331,6 +331,11 @@ function MainApp({ user, onLogout }) {
                     style={{ width:13, height:13, borderRadius:'50%', background:c, cursor:'pointer', outline: activeProject.color===c ? `2px solid ${c}` : 'none', outlineOffset:2, transform: activeProject.color===c ? 'scale(1.3)' : 'scale(1)', transition:'all 0.15s' }} />
                 ))}
               </div>
+              <button
+                onClick={()=>{ const np = !activeProject.is_private; supabase.from('projects').update({is_private:np}).eq('id',activeProject.id); setProjects(ps=>ps.map(p=>p.id===activeProject.id?{...p,is_private:np}:p)) }}
+                style={{background:activeProject.is_private?'rgba(232,103,58,0.15)':'rgba(34,197,94,0.15)',border:`1px solid ${activeProject.is_private?'rgba(232,103,58,0.4)':'rgba(34,197,94,0.4)'}`,color:activeProject.is_private?'#E8673A':'#22C55E',padding:'4px 12px',borderRadius:6,fontSize:12,cursor:'pointer',fontFamily:"'DM Sans',sans-serif",fontWeight:600}}>
+                {activeProject.is_private ? '🔒 비공개' : '🌐 공개'}
+              </button>
               <div style={{ display:'flex', gap:4, marginLeft:8, background:'rgba(255,255,255,0.03)', padding:3, borderRadius:9 }}>
                 {[['tasks','📋 업무'],['notes','📝 노트']].map(([k,label]) => (
                   <button key={k} onClick={()=>setActiveTab(k)}
